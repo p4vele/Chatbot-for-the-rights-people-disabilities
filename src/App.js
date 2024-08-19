@@ -104,18 +104,24 @@ const ChatScreen = () => {
         const assistantMessage = { role: 'assistant', content: responseMessage };
         setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
         if (isTTSEnabled) speak(responseMessage); }
+      }
     else if (option === 'B') {
-      if (userInfo.age === '0-18' && userInfo.percent==='38-50') {
+      if (userInfo.age === '0-18') {
         const responseMessage = "לא ניתן לקבוע מיד, נא לבדוק עם סניפך הקרוב";
         const assistantMessage = { role: 'assistant', content: responseMessage };
         setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
         if (isTTSEnabled) speak(responseMessage);
-      } else if(!(userInfo.age === '0-18') && userInfo.percent==='0-38') {
+      } else if(userInfo.age === '18-64' && userInfo.percent==='0-38') {
         const responseMessage = "לפי המערכת, הינך זכאי לשנת לימודים אחרונה אשר תסובסד על ידי הביטוח לאומי\n";
         const assistantMessage = { role: 'assistant', content: responseMessage };
         setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
         if (isTTSEnabled) speak(responseMessage);
-      } else if(!(userInfo.age === '0-18') && !(userInfo.percent==='0-38')) {
+      } else if(userInfo.age === '18-64' && !(userInfo.percent==='38-50')) {
+        const responseMessage = "לפי המערכת, הינך זכאי לקצבת לימודים מלאה אשר תסובסד על ידי הביטוח לאומי\n בנוסף, במהלך הלימודים הינך זכאי לקצבת לימודים";
+        const assistantMessage = { role: 'assistant', content: responseMessage };
+        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+        if (isTTSEnabled) speak(responseMessage);
+      } else if(userInfo.age === '18-64' && !(userInfo.percent==='50-100')) {
         const responseMessage = "לפי המערכת, הינך זכאי לקצבת לימודים מלאה אשר תסובסד על ידי הביטוח לאומי\n בנוסף, במהלך הלימודים הינך זכאי לקצבת לימודים";
         const assistantMessage = { role: 'assistant', content: responseMessage };
         setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
@@ -125,7 +131,7 @@ const ChatScreen = () => {
   
     setStep(step + 1); // Move to the next step
   };
-};
+
   const toggleTTS = () => {
     setIsTTSEnabled(!isTTSEnabled);
   };
