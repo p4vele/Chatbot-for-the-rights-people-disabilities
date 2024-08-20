@@ -9,6 +9,7 @@ const ChatScreen = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [step, setStep] = useState(0); 
+  const [isThinking, setIsThinking] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: '',
     age: '',
@@ -23,6 +24,7 @@ const ChatScreen = () => {
   const inputRef = useRef(null);
   const scrollViewRef = useRef(null);
   const apikey = process.env.REACT_APP_OPENAI_API_KEY;
+  
 
   const steps = [
     "מה שמך?",
@@ -199,58 +201,52 @@ const ChatScreen = () => {
 
   const sendMessage = async () => {
     if (!message.trim()) return;
-
+  
     const userMessage = { role: 'user', content: message };
     setChatMessages((prevMessages) => [...prevMessages, userMessage]);
-
-    if (step < steps.length) {
-      if (step === 1) return;  // Age is handled by buttons, skip message input
-      if (step === 2) return;  // Disability type is handled by buttons, skip message input
-      if (step === 3) return;  // Percent is handled by buttons, skip message input
-      if (step === 4) return;  // Living area is handled by buttons, skip message input
-
-      switch (step) {
-        case 0:
-          setUserInfo((prev) => ({ ...prev, name: message }));
-          break;
-        default:
-          break;
-      }
-      setStep(step + 1);
-    } else {
-      try {
-        const response = await axios.post(
-          'https://api.openai.com/v1/chat/completions',
-          {
-            model: 'gpt-3.5-turbo',
-            messages: [
-              {
-                role: 'system',
-                content: `You are an expert on rights for people with disabilities. The user is named ${userInfo.name}, aged ${userInfo.age}, with a disability type of ${userInfo.disabilityType}, disability percent of ${userInfo.percent}, and lives in ${userInfo.livingArea} with location ${userInfo.specificLocation}.`,
-              },
-              userMessage,
-            ],
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${apikey}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
-        const assistantMessage = { role: 'assistant', content: response.data.choices[0].message.content };
-        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        if (isTTSEnabled) {
-          speak(response.data.choices[0].message.content); 
-        }
-      } catch (error) {
-        console.error('Error sending message to ChatGPT:', error);
-      }
-    }
     setMessage(''); 
-    inputRef.current.focus(); 
+    inputRef.current.focus();
+  
+    if (step < steps.length) {
+      setStep(step + 1);
+      return;
+    }
+  
+    setIsThinking(true);  // Show thinking dots
+  
+    try {
+      const response = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          model: 'gpt-3.5-turbo',
+          messages: [
+            {
+              role: 'system',
+              content: `You are an expert on rights for people with disabilities. The user is named ${userInfo.name}, aged ${userInfo.age}, with a disability type of ${userInfo.disabilityType}, disability percent of ${userInfo.percent}, and lives in ${userInfo.livingArea} with location ${userInfo.specificLocation}.`,
+            },
+            userMessage,
+          ],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apikey}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      const assistantMessage = { role: 'assistant', content: response.data.choices[0].message.content };
+      setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+      if (isTTSEnabled) {
+        speak(response.data.choices[0].message.content); 
+      }
+    } catch (error) {
+      console.error('Error sending message to ChatGPT:', error);
+    }
+  
+    setIsThinking(false);  // Hide thinking dots
   };
+  
   
   return (
     <div className="app-container">
@@ -260,13 +256,20 @@ const ChatScreen = () => {
             <h2>ברוך הבא לצ'אט בוט זכויות בעלי מוגבלויות!</h2>
           </div>
           <div className="chat-messages" ref={scrollViewRef}>
-            {chatMessages.map((msg, index) => (
-              <div key={index} className={`chat-message ${msg.role}`}>
-                <span className="role">{msg.role === 'user' ? ' :אני ' : 'בוט : '}</span>
-                <span className="content">{msg.content}</span>
-              </div>
-            ))}
-          </div>
+              {chatMessages.map((msg, index) => (
+                <div key={index} className={`chat-message ${msg.role}`}>
+                  <span className="role">{msg.role === 'user' ? ' :אני ' : 'בוט : '}</span>
+                  <span className="content">{msg.content}</span>
+                </div>
+              ))}
+              {isThinking && (
+                <div className="chat-message assistant">
+                  <span className="role">בוט : </span>
+                  <span className="content">...</span> 
+                </div>
+              )}
+            </div>
+
           
           <div className="input-container">
             {step === 1 ? (
@@ -359,10 +362,10 @@ const ChatScreen = () => {
               <button onClick={toggleTTS}>
                 <FontAwesomeIcon icon={isTTSEnabled ? faVolumeUp : faVolumeMute} />
               </button>
-            </div>
-            {step > 0 && (
+              {step > 0 && (
               <button className="go-back" onClick={goBack}>חזור</button>
             )}
+            </div>
           </div>
         </div>
       </div>
