@@ -28,10 +28,11 @@ const ChatScreen = () => {
     "מה שמך?",
     "מה גילך?",
     "מהו סוג הלקות שלך?",
-    "מהו אחוז הלקות שלך?",
+    "מהו אחוז הנכות הרפואית שלך?",
     "היכן אתה גר?",
     "איזה יישוב אתה בוחר?",
-    "מה תרצה לדעת?"
+    "מה תרצה לדעת?",
+    "מהו אחוז אי כשירות עבודה שלך?"
   ];
 
   useEffect(() => {
@@ -78,58 +79,72 @@ const ChatScreen = () => {
     }
   };
 
+  const HandleAOption = (option) => {
+    const userMessage = { role: 'user', content: option };
+    setChatMessages((prevMessages) => [...prevMessages, userMessage]);
+    if (option === '0-59') {
+      const responseMessage = "לא זכאי.";
+      const assistantMessage = { role: 'assistant', content: responseMessage };
+      setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+      if (isTTSEnabled) speak(responseMessage);
+    } else if (option === '60') {
+      const responseMessage = "2476 שח";
+      const assistantMessage = { role: 'assistant', content: responseMessage };
+      setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+      if (isTTSEnabled) speak(responseMessage);
+    } else if (option === '65') {
+      const responseMessage = "2636 שח";
+      const assistantMessage = { role: 'assistant', content: responseMessage };
+      setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+      if (isTTSEnabled) speak(responseMessage);
+    } else if (option === '74') {
+      const responseMessage = "2925 שח";
+      const assistantMessage = { role: 'assistant', content: responseMessage };
+      setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+      if (isTTSEnabled) speak(responseMessage);
+    }
+    else if (option === '75+'){
+      const responseMessage = "4,291  שח";
+      const assistantMessage = { role: 'assistant', content: responseMessage };
+      setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+      if (isTTSEnabled) speak(responseMessage);
+    }
+    setStep(step + 1);
+  }
   const handleOptionSelection = (option) => {
     const userMessage = { role: 'user', content: option };
     setChatMessages((prevMessages) => [...prevMessages, userMessage]);
   
-    if (option === 'A') {
-      if (userInfo.age === '0-18' && userInfo.percent === '0-38') {
-        const responseMessage = "קצבה כללית כיום עומדת על 1771 שקלים חדשים\n שים לי כי מודבר עד גיל 18 ו3 חודשים";
-        const assistantMessage = { role: 'assistant', content: responseMessage };
-        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        if (isTTSEnabled) speak(responseMessage);
-      } else if (userInfo.age === '0-18') {
-        const responseMessage = "קצבה כללית כיום עומדת על 3479 שקלים חדשים\n שים לי כי מודבר עד גיל 18 ו3 חודשים";
-        const assistantMessage = { role: 'assistant', content: responseMessage };
-        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        if (isTTSEnabled) speak(responseMessage);
-      }
-      else if (!(userInfo.age === '0-18')&& userInfo.percent === '50-100') {
-        const responseMessage = "קצבה כללית כיום עומדת על 3479 שקלים חדשים\n שים לי כי מודבר עד גיל 18 ו3 חודשים";
-        const assistantMessage = { role: 'assistant', content: responseMessage };
-        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        if (isTTSEnabled) speak(responseMessage);
-      } else if (!(userInfo.age === '0-18')&& userInfo.percent === '50-100') {
-        const responseMessage = "קצבה כללית כיום עומדת על 3479 שקלים חדשים";
-        const assistantMessage = { role: 'assistant', content: responseMessage };
-        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        if (isTTSEnabled) speak(responseMessage); }
-      }
-    else if (option === 'B') {
-      if (userInfo.age === '0-18') {
-        const responseMessage = "לא ניתן לקבוע מיד, נא לבדוק עם סניפך הקרוב";
-        const assistantMessage = { role: 'assistant', content: responseMessage };
-        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        if (isTTSEnabled) speak(responseMessage);
-      } else if(userInfo.age === '18-64' && userInfo.percent==='0-38') {
-        const responseMessage = "לפי המערכת, הינך זכאי לשנת לימודים אחרונה אשר תסובסד על ידי הביטוח לאומי\n";
-        const assistantMessage = { role: 'assistant', content: responseMessage };
-        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        if (isTTSEnabled) speak(responseMessage);
-      } else if(userInfo.age === '18-64' && !(userInfo.percent==='38-50')) {
-        const responseMessage = "לפי המערכת, הינך זכאי לקצבת לימודים מלאה אשר תסובסד על ידי הביטוח לאומי\n בנוסף, במהלך הלימודים הינך זכאי לקצבת לימודים";
-        const assistantMessage = { role: 'assistant', content: responseMessage };
-        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        if (isTTSEnabled) speak(responseMessage);
-      } else if(userInfo.age === '18-64' && !(userInfo.percent==='50-100')) {
-        const responseMessage = "לפי המערכת, הינך זכאי לקצבת לימודים מלאה אשר תסובסד על ידי הביטוח לאומי\n בנוסף, במהלך הלימודים הינך זכאי לקצבת לימודים";
-        const assistantMessage = { role: 'assistant', content: responseMessage };
-        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        if (isTTSEnabled) speak(responseMessage);
-      }
+    //section For A
+    if (option === 'קצבה-כללית') {
+      setStep(step + 1); // Move to the next step
     }
-  
-    setStep(step + 1); // Move to the next step
+      //section for B
+    else if (option === 'שיקום') {
+      if (userInfo.age === '0-18') {
+        const responseMessage = "על פי הנתונים שהזנת, לא ניתן לקבוע מיד, נא לבדוק עם סניפך הקרוב";
+        const assistantMessage = { role: 'assistant', content: responseMessage };
+        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+        if (isTTSEnabled) speak(responseMessage);
+      } else if(userInfo.age === '18-64' && userInfo.percent==='0-20') {
+        const responseMessage = "הינך לא זכאי לסבסוד מלגדת לימודים על ידי שיקום";
+        const assistantMessage = { role: 'assistant', content: responseMessage };
+        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+        if (isTTSEnabled) speak(responseMessage);
+      } else if(userInfo.age === '18-64' && userInfo.percent==='21-39') {
+        const responseMessage = "הינך זכאי לשנת לימודים אחת, אשר הינה השנה האחרונה ללימודים";
+        const assistantMessage = { role: 'assistant', content: responseMessage };
+        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+        if (isTTSEnabled) speak(responseMessage);
+      } else if(userInfo.age === '18-64' && userInfo.percent==='40+') {
+        const responseMessage = "לפי המערכת, הינך זכאי לקצבת לימודים מלאה אשר תסובסד על ידי הביטוח לאומי\n בנוסף, במהלך הלימודים הינך זכאי לקצבת לימודים אם הינך מקבל נכות חלקית או לא מקבל קצבה";
+        const assistantMessage = { role: 'assistant', content: responseMessage };
+        setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+        if (isTTSEnabled) speak(responseMessage);
+      }
+      setStep(step + 2); // Move to the next step
+    }
+    
   };
 
   const toggleTTS = () => {
@@ -262,57 +277,67 @@ const ChatScreen = () => {
               </div>
             ) : step === 2 ? (
               <div className="button-group">
-                <button onClick={() => handleDisabilitySelection('Eyes Disability')} id="disability-eyes">לקות ראיה</button>
-                <button onClick={() => handleDisabilitySelection('Movement Disability')} id="disability-movement">לקות הליכה</button>
-                <button onClick={() => handleDisabilitySelection('Hearing Disability')} id="disability-hearing">לקות שמיעה</button>
+                <button onClick={() => handleDisabilitySelection('לקות ראייה')} id="disability-eyes">לקות ראיה</button>
+                <button onClick={() => handleDisabilitySelection('לקות פיזית')} id="disability-movement">לקות פיזית</button>
+                <button onClick={() => handleDisabilitySelection('לקות שמיעה')} id="disability-hearing">לקות שמיעה</button>
               </div>
             ) : step === 3 ? (
               <div className="button-group">
-                <button onClick={() => handlePercentSelection('0-38')} id="percent-0-38">0 - 38</button>
-                <button onClick={() => handlePercentSelection('38-50')} id="percent-38-50">38 - 50</button>
-                <button onClick={() => handlePercentSelection('50-100')} id="percent-50+">50+</button>
+                <button onClick={() => handlePercentSelection('0-20')} id="percent-0-38">0 - 20</button>
+                <button onClick={() => handlePercentSelection('21-39')} id="percent-21-39">21 - 39</button>
+                <button onClick={() => handlePercentSelection('40-100')} id="percent-50+">40+</button>
               </div>
             ) : step === 4 ? (
               <div className="button-group">
-                <button onClick={() => handleLivingAreaSelection('North')} id="living-area-north">צפון</button>
-                <button onClick={() => handleLivingAreaSelection('Center')} id="living-area-center">מרכז</button>
-                <button onClick={() => handleLivingAreaSelection('South')} id="living-area-south">דרום</button>
+                <button onClick={() => handleLivingAreaSelection('צפון')} id="living-area-north">צפון</button>
+                <button onClick={() => handleLivingAreaSelection('מרכז')} id="living-area-center">מרכז</button>
+                <button onClick={() => handleLivingAreaSelection('דרום')} id="living-area-south">דרום</button>
               </div>
-            ) : step === 5 && userInfo.livingArea === 'North' ? (
+            ) : step === 5 && userInfo.livingArea === 'צפון' ? (
               <div className="button-group">
-                <button onClick={() => handleLocationSelection('Bat-Yam')} id="location-bat-yam">בת ים</button>
-                <button onClick={() => handleLocationSelection('Hadera')} id="location-hadera">חדרה</button>
-                <button onClick={() => handleLocationSelection('Haifa')} id="location-haifa">חיפה</button>
-                <button onClick={() => handleLocationSelection('Tveria')} id="location-tveria">טבריה</button>
-                <button onClick={() => handleLocationSelection('Carmiel')} id="location-carmiel">כרמיאל</button>
-                <button onClick={() => handleLocationSelection('Nahariha')} id="location-nahariha">נהריה</button>
-                <button onClick={() => handleLocationSelection('Nazrat')} id="location-nazrat">נצרת</button>
-                <button onClick={() => handleLocationSelection('Natania')} id="location-natania">נתניה</button>
-                <button onClick={() => handleLocationSelection('Afola')} id="location-afola">עפולה</button>
-                <button onClick={() => handleLocationSelection('Kraiot')} id="location-kraiot">קריות</button>
+                <button onClick={() => handleLocationSelection('בת-ים')} id="location-bat-yam">בת ים</button>
+                <button onClick={() => handleLocationSelection('חדרה')} id="location-hadera">חדרה</button>
+                <button onClick={() => handleLocationSelection('חיפה')} id="location-haifa">חיפה</button>
+                <button onClick={() => handleLocationSelection('טבריה')} id="location-tveria">טבריה</button>
+                <button onClick={() => handleLocationSelection('כרמיאל')} id="location-carmiel">כרמיאל</button>
+                <button onClick={() => handleLocationSelection('נהריה')} id="location-nahariha">נהריה</button>
+                <button onClick={() => handleLocationSelection('נצרת')} id="location-nazrat">נצרת</button>
+                <button onClick={() => handleLocationSelection('נתניה')} id="location-natania">נתניה</button>
+                <button onClick={() => handleLocationSelection('עפולה')} id="location-afola">עפולה</button>
+                <button onClick={() => handleLocationSelection('קריות')} id="location-kraiot">קריות</button>
               </div>
-            ) : step === 5 && userInfo.livingArea === 'South' ? (
+            ) : step === 5 && userInfo.livingArea === 'דרום' ? (
               <div className="button-group">
-                <button onClick={() => handleLocationSelection('Ashdod')} id="location-ashdod">אשדוד</button>
-                <button onClick={() => handleLocationSelection('Askelon')} id="location-askelon">אשקלון</button>
-                <button onClick={() => handleLocationSelection('Beer-Sheva')} id="location-beer-sheva">באר שבע</button>
+                <button onClick={() => handleLocationSelection('אשדוד')} id="location-ashdod">אשדוד</button>
+                <button onClick={() => handleLocationSelection('אשקלון')} id="location-askelon">אשקלון</button>
+                <button onClick={() => handleLocationSelection('באר-שבע')} id="location-beer-sheva">באר שבע</button>
               </div>  
-            ) :step === 5 && userInfo.livingArea === 'Center' ? (
+            ) :step === 5 && userInfo.livingArea === 'מרכז' ? (
               <div className="button-group">
-                <button onClick={() => handleLocationSelection('Bni-Brak')} id="location-bni-brak">בני ברק</button>
-                <button onClick={() => handleLocationSelection('Holon')} id="location-holon">חולון</button>
-                <button onClick={() => handleLocationSelection('Cfar-Saba')} id="location-cfar-saba">כפר סבא</button>
-                <button onClick={() => handleLocationSelection('Petah-Tikva')} id="location-petah-tikva">פתח תקווה</button>
-                <button onClick={() => handleLocationSelection('Rishon-Lezion')} id="location-rishon-lezion">ראשון לציון</button>
-                <button onClick={() => handleLocationSelection('Rehovot')} id="location-rehovot">רחובות</button>
-                <button onClick={() => handleLocationSelection('Ramla')} id="location-ramla">רמלה</button>
-                <button onClick={() => handleLocationSelection('Ramat-Gan')} id="location-ramat-gan">רמת גן</button>
-                <button onClick={() => handleLocationSelection('Tel-Aviv')} id="location-tlv">תל אביב</button>
+                <button onClick={() => handleLocationSelection('בני-ברק')} id="location-bni-brak">בני ברק</button>
+                <button onClick={() => handleLocationSelection('חולון')} id="location-holon">חולון</button>
+                <button onClick={() => handleLocationSelection('כפר-סבא')} id="location-cfar-saba">כפר סבא</button>
+                <button onClick={() => handleLocationSelection('פתח-תקווה')} id="location-petah-tikva">פתח תקווה</button>
+                <button onClick={() => handleLocationSelection('ראשון-לציון')} id="location-rishon-lezion">ראשון לציון</button>
+                <button onClick={() => handleLocationSelection('רחובות')} id="location-rehovot">רחובות</button>
+                <button onClick={() => handleLocationSelection('רמלה')} id="location-ramla">רמלה</button>
+                <button onClick={() => handleLocationSelection('רמת-גן')} id="location-ramat-gan">רמת גן</button>
+                <button onClick={() => handleLocationSelection('תל-אביב')} id="location-tlv">תל אביב</button>
                 </div>  
             ) : step === 6 ? (
               <div className="button-group">
-                <button onClick={() => handleOptionSelection('A')} id="option-a">בדיקה לגבי קצבה כללית</button>
-                <button onClick={() => handleOptionSelection('B')} id="option-b"> זכאות לשיקום לימודים</button>
+                <button onClick={() => handleOptionSelection('קצבה-כללית')} id="option-a">בדיקה לגבי סכום קצבה כללית</button>
+                <button onClick={() => handleOptionSelection('שיקום')} id="option-b"> זכאות לשיקום לימודים</button>
+              </div>
+            ) : step === 7 ? (
+              <div className="button-group">
+                <button onClick={() => HandleAOption('0-59')} id="work-a"> 0 - 59 % </button>
+                <button onClick={() => HandleAOption('60')} id="work-b"> 60 % </button>
+                <button onClick={() => HandleAOption('65')} id="work-c"> 65 % </button>
+                <button onClick={() => HandleAOption('74')} id="work-d"> 74 %</button>
+                <button onClick={() => HandleAOption('75+')} id="work-e"> 75% +</button>
+
+
               </div>
             ) : (
               <div className="input-field">
