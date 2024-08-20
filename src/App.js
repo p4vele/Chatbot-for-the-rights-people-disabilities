@@ -138,7 +138,7 @@ const ChatScreen = () => {
         const assistantMessage = { role: 'assistant', content: responseMessage };
         setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
         if (isTTSEnabled) speak(responseMessage);
-      } else if(userInfo.age === '18-64' && userInfo.percent==='40+') {
+      } else if(userInfo.age === '18-64' && userInfo.percent==='40-100') {
         const responseMessage = "לפי המערכת, הינך זכאי לקצבת לימודים מלאה אשר תסובסד על ידי הביטוח לאומי\n בנוסף, במהלך הלימודים הינך זכאי לקצבת לימודים אם הינך מקבל נכות חלקית או לא מקבל קצבה";
         const assistantMessage = { role: 'assistant', content: responseMessage };
         setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
@@ -222,7 +222,7 @@ const ChatScreen = () => {
           messages: [
             {
               role: 'system',
-              content: `You are an expert on rights for people with disabilities. The user is named ${userInfo.name}, aged ${userInfo.age}, with a disability type of ${userInfo.disabilityType}, disability percent of ${userInfo.percent}, and lives in ${userInfo.livingArea} with location ${userInfo.specificLocation}.`,
+              content: `תתנהג כמו מומחה לענייני ביטוח לאומי The user is named ${userInfo.name}, aged ${userInfo.age}, with a disability type of ${userInfo.disabilityType}, disability percent of ${userInfo.percent}, and lives in ${userInfo.livingArea} with location ${userInfo.specificLocation}.`,
             },
             userMessage,
           ],
