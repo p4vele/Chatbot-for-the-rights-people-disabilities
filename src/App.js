@@ -90,23 +90,23 @@ const ChatScreen = () => {
       setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
       if (isTTSEnabled) speak(responseMessage);
     } else if (option === '60') {
-      const responseMessage = "2476 שח";
+      const responseMessage = " כיום, קצבת הנכות עבור אי-כושר העבודה עבור מקרה זה, הינו : 2,476 שקלים חדשים";
       const assistantMessage = { role: 'assistant', content: responseMessage };
       setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
       if (isTTSEnabled) speak(responseMessage);
     } else if (option === '65') {
-      const responseMessage = "2636 שח";
+      const responseMessage = " כיום, קצבת הנכות עבור אי-כושר העבודה עבור מקרה זה, הינו : 2,636 שקלים חדשים";
       const assistantMessage = { role: 'assistant', content: responseMessage };
       setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
       if (isTTSEnabled) speak(responseMessage);
     } else if (option === '74') {
-      const responseMessage = "2925 שח";
+      const responseMessage = " כיום, קצבת הנכות עבור אי-כושר העבודה עבור מקרה זה, הינו : 2,925 שקלים חדשים";
       const assistantMessage = { role: 'assistant', content: responseMessage };
       setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
       if (isTTSEnabled) speak(responseMessage);
     }
     else if (option === '75+'){
-      const responseMessage = "4,291  שח";
+      const responseMessage = " כיום, קצבת הנכות עבור אי-כושר העבודה עבור מקרה זה, הינו : 4,291 שקלים חדשים";
       const assistantMessage = { role: 'assistant', content: responseMessage };
       setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
       if (isTTSEnabled) speak(responseMessage);
