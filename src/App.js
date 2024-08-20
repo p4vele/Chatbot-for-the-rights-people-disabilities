@@ -85,7 +85,7 @@ const ChatScreen = () => {
     const userMessage = { role: 'user', content: option };
     setChatMessages((prevMessages) => [...prevMessages, userMessage]);
     if (option === '0-59') {
-      const responseMessage = "לא זכאי.";
+      const responseMessage = "על פי הנתונים שהוזנו למערכת, אינך זכאי לקצבה, לבירור נוסף, ניתן לפנות לסניף";
       const assistantMessage = { role: 'assistant', content: responseMessage };
       setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
       if (isTTSEnabled) speak(responseMessage);
