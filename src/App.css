@@ -86,7 +86,7 @@
   background-color: #f1f1f1;
   word-wrap: break-word;
   direction: rtl;
-
+  white-space: pre-wrap;
 }
 
 .chat-message.user .content {

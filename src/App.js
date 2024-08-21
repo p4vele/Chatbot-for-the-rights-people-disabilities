@@ -205,7 +205,19 @@ const ChatScreen = () => {
     setUserInfo((prev) => ({ ...prev, specificLocation: location }));
     setStep(step + 1);
   };
+  function formatAssistantMessage(message) {
+    return message
+        .replace(/(\d+\.\s*)/g, '\n$1')
+        .replace(/:\s*/g, ':\n')
+        .trim();
+}
 
+
+
+
+
+
+  
   const sendMessage = async () => {
     if (!message.trim()) return;
   
@@ -242,7 +254,7 @@ const ChatScreen = () => {
         }
       );
   
-      const assistantMessage = { role: 'assistant', content: response.data.choices[0].message.content };
+      const assistantMessage = { role: 'assistant', content: formatAssistantMessage(response.data.choices[0].message.content) };
       setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
       if (isTTSEnabled) {
         speak(response.data.choices[0].message.content); 
@@ -274,7 +286,7 @@ const ChatScreen = () => {
               {chatMessages.map((msg, index) => (
                 <div key={index} className={`chat-message ${msg.role}`}>
                   <span className="role">{msg.role === 'user' ? ' :אני ' : 'בוט : '}</span>
-                  <span className="content">{msg.content}</span>
+                  <span className="content" >{msg.content}</span>
                 </div>
               ))}
               {isThinking && (
