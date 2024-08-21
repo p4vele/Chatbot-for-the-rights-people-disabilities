@@ -20,7 +20,7 @@ const ChatScreen = () => {
   });
   const [isTTSEnabled, setIsTTSEnabled] = useState(true); 
   const [lastSpokenMessage, setLastSpokenMessage] = useState('');
-
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const inputRef = useRef(null);
   const scrollViewRef = useRef(null);
   const apikey = process.env.REACT_APP_OPENAI_API_KEY;
@@ -63,10 +63,10 @@ const ChatScreen = () => {
         speak(steps[step]);
       }
     } else {
-      const botMessage = { role: 'assistant', content: "תודה על המידע! כעת אתה יכול לשאול אותי שאלות או לחזור חזרה למידע נוסף!" };
+      const botMessage = { role: 'assistant', content: "תודה על שיתוף הפעולה! כעת אתה יכול לשאול אותי שאלות או לחזור חזרה למידע נוסף!" };
       setChatMessages((prevMessages) => [...prevMessages, botMessage]);
       if (isTTSEnabled) {
-        speak(" תודה על המידע! כעת אתה יכול לשאול אותי שאלות נוספות או לחזור חזרה למידע נוסף.");
+        speak(" תודה על שיתוף הפעולה! כעת אתה יכול לשאול אותי שאלות נוספות או לחזור חזרה למידע נוסף.");
       }
     }
   }, [step]);
@@ -79,6 +79,13 @@ const ChatScreen = () => {
       speechSynthesis.speak(utterance);
       setLastSpokenMessage(text); 
     }
+  };
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+  const closePopup = () => {
+    setIsPopupOpen(false);
   };
 
   const HandleAOption = (option) => {
@@ -254,6 +261,14 @@ const ChatScreen = () => {
         <div className="chat-container">
           <div className="chat-header">
             <h2>ברוך הבא לצ'אט בוט זכויות בעלי מוגבלויות!</h2>
+            <div>
+              <h4 className="disclaimer">
+                  צא'ט זה אינו מהווה תחלופה או כל ייעוץ מקצועי ופותח על מנת להכיוון בלבד!             
+               <button className="open-popup" onClick={openPopup}>
+                  למידע נוסף לחצו כאן!
+              </button>
+              </h4>
+            </div>
           </div>
           <div className="chat-messages" ref={scrollViewRef}>
               {chatMessages.map((msg, index) => (
@@ -279,11 +294,20 @@ const ChatScreen = () => {
                 <button onClick={() => handleAgeSelection('64+')} id="age-64+">64+</button>
               </div>
             ) : step === 2 ? (
-              <div className="button-group">
-                <button onClick={() => handleDisabilitySelection('לקות ראייה')} id="disability-eyes">לקות ראיה</button>
-                <button onClick={() => handleDisabilitySelection('לקות פיזית')} id="disability-movement">לקות פיזית</button>
-                <button onClick={() => handleDisabilitySelection('לקות שמיעה')} id="disability-hearing">לקות שמיעה</button>
-              </div>
+              <div className="dropdown-group">
+                <div>
+                    לחץ על מנת לבחור
+                  </div>
+                <select onChange={(e) => handleDisabilitySelection(e.target.value)} id="living-area-select">
+                    <option value= "" disabled selected>בחר סוג לקות</option>
+                    <option value="שמיעה">שמיעה</option>
+                    <option value="ראייה">ראייה</option>
+                    <option value="ניידות">ניידות</option>
+                    <option value="נפשי">נפשי</option>
+                    <option value="קוגנטיבית">קוגנטיבית</option>
+
+                </select>
+              </div>             
             ) : step === 3 ? (
               <div className="button-group">
                 <button onClick={() => handlePercentSelection('0-20')} id="percent-0-38">0 - 20</button>
@@ -291,43 +315,92 @@ const ChatScreen = () => {
                 <button onClick={() => handlePercentSelection('40-100')} id="percent-50+">40+</button>
               </div>
             ) : step === 4 ? (
-              <div className="button-group">
-                <button onClick={() => handleLivingAreaSelection('צפון')} id="living-area-north">צפון</button>
-                <button onClick={() => handleLivingAreaSelection('מרכז')} id="living-area-center">מרכז</button>
-                <button onClick={() => handleLivingAreaSelection('דרום')} id="living-area-south">דרום</button>
+              <div className="dropdown-group">
+                <div>
+                    לחץ על מנת לבחור אזור
+                  </div>
+                <select onChange={(e) => handleLivingAreaSelection(e.target.value)} id="living-area-select">
+                    <option value= "" disabled selected>בחר אזור מגורים</option>
+                    <option value="צפון">צפון</option>
+                    <option value="מרכז">מרכז</option>
+                    <option value="דרום">דרום</option>
+                    <option value="ירושלים">ירושלים</option>
+                    <option value="אילת">אילת</option>
+
+
+                </select>
               </div>
-            ) : step === 5 && userInfo.livingArea === 'צפון' ? (
-              <div className="button-group">
-                <button onClick={() => handleLocationSelection('בת-ים')} id="location-bat-yam">בת ים</button>
-                <button onClick={() => handleLocationSelection('חדרה')} id="location-hadera">חדרה</button>
-                <button onClick={() => handleLocationSelection('חיפה')} id="location-haifa">חיפה</button>
-                <button onClick={() => handleLocationSelection('טבריה')} id="location-tveria">טבריה</button>
-                <button onClick={() => handleLocationSelection('כרמיאל')} id="location-carmiel">כרמיאל</button>
-                <button onClick={() => handleLocationSelection('נהריה')} id="location-nahariha">נהריה</button>
-                <button onClick={() => handleLocationSelection('נצרת')} id="location-nazrat">נצרת</button>
-                <button onClick={() => handleLocationSelection('נתניה')} id="location-natania">נתניה</button>
-                <button onClick={() => handleLocationSelection('עפולה')} id="location-afola">עפולה</button>
-                <button onClick={() => handleLocationSelection('קריות')} id="location-kraiot">קריות</button>
+            )  : step === 5 && userInfo.livingArea === 'צפון' ? (
+              <div className="dropdown-group">
+                <div>
+                    לחץ על מנת לבחור עיר
+                  </div>
+                  <select onChange={(e) => handleLocationSelection(e.target.value)} id="location-north-select">
+                      <option value="" disabled selected>בחר מיקום</option>
+                      <option value="בת-ים">בת ים</option>
+                      <option value="חדרה">חדרה</option>
+                      <option value="חיפה">חיפה</option>
+                      <option value="טבריה">טבריה</option>
+                      <option value="כרמיאל">כרמיאל</option>
+                      <option value="נהריה">נהריה</option>
+                      <option value="נצרת">נצרת</option>
+                      <option value="נתניה">נתניה</option>
+                      <option value="עפולה">עפולה</option>
+                      <option value="קריות">קריות</option>
+                  </select>
               </div>
-            ) : step === 5 && userInfo.livingArea === 'דרום' ? (
-              <div className="button-group">
-                <button onClick={() => handleLocationSelection('אשדוד')} id="location-ashdod">אשדוד</button>
-                <button onClick={() => handleLocationSelection('אשקלון')} id="location-askelon">אשקלון</button>
-                <button onClick={() => handleLocationSelection('באר-שבע')} id="location-beer-sheva">באר שבע</button>
-              </div>  
-            ) :step === 5 && userInfo.livingArea === 'מרכז' ? (
-              <div className="button-group">
-                <button onClick={() => handleLocationSelection('בני-ברק')} id="location-bni-brak">בני ברק</button>
-                <button onClick={() => handleLocationSelection('חולון')} id="location-holon">חולון</button>
-                <button onClick={() => handleLocationSelection('כפר-סבא')} id="location-cfar-saba">כפר סבא</button>
-                <button onClick={() => handleLocationSelection('פתח-תקווה')} id="location-petah-tikva">פתח תקווה</button>
-                <button onClick={() => handleLocationSelection('ראשון-לציון')} id="location-rishon-lezion">ראשון לציון</button>
-                <button onClick={() => handleLocationSelection('רחובות')} id="location-rehovot">רחובות</button>
-                <button onClick={() => handleLocationSelection('רמלה')} id="location-ramla">רמלה</button>
-                <button onClick={() => handleLocationSelection('רמת-גן')} id="location-ramat-gan">רמת גן</button>
-                <button onClick={() => handleLocationSelection('תל-אביב')} id="location-tlv">תל אביב</button>
-                </div>  
-            ) : step === 6 ? (
+          ) : step === 5 && userInfo.livingArea === 'דרום' ? (
+              <div className="dropdown-group">
+                  <div>
+                    לחץ על מנת לבחור עיר
+                  </div>
+                  <select onChange={(e) => handleLocationSelection(e.target.value)} id="location-south-select">
+                      <option value="" disabled selected>בחר מיקום</option>
+                      <option value="אשדוד">אשדוד</option>
+                      <option value="אשקלון">אשקלון</option>
+                      <option value="באר-שבע">באר שבע</option>
+                  </select>
+              </div>
+          ) : step === 5 && userInfo.livingArea === 'ירושלים' ? (
+            <div className="dropdown-group">
+                <div>
+                  לחץ על מנת לבחור עיר
+                </div>
+                <select onChange={(e) => handleLocationSelection(e.target.value)} id="location-south-select">
+                    <option value="" disabled selected>בחר מיקום</option>
+                    <option value="ירושלים-צפון">ירושלים צפון</option>
+                    <option value="ירושלים">ירושלים</option>
+                </select>
+            </div>
+        ) : step === 5 && userInfo.livingArea === 'אילת' ? (
+          <div className="dropdown-group">
+              <div>
+                לחץ על מנת לבחור עיר
+              </div>
+              <select onChange={(e) => handleLocationSelection(e.target.value)} id="location-south-select">
+                  <option value="" disabled selected>בחר מיקום</option>
+                  <option value="אילת"> אילת </option>
+              </select>
+          </div>
+      ) : step === 5 && userInfo.livingArea === 'מרכז' ? (
+              <div className="dropdown-group">
+                <div>
+                    לחץ על מנת לבחור עיר
+                  </div>
+                  <select onChange={(e) => handleLocationSelection(e.target.value)} id="location-center-select">
+                      <option value="" disabled selected>בחר מיקום</option>
+                      <option value="בני-ברק">בני ברק</option>
+                      <option value="חולון">חולון</option>
+                      <option value="כפר-סבא">כפר סבא</option>
+                      <option value="פתח-תקווה">פתח תקווה</option>
+                      <option value="ראשון-לציון">ראשון לציון</option>
+                      <option value="רחובות">רחובות</option>
+                      <option value="רמלה">רמלה</option>
+                      <option value="רמת-גן">רמת גן</option>
+                      <option value="תל-אביב">תל אביב</option>
+                  </select>
+              </div>
+          ) : step === 6 ? (
               <div className="button-group">
                 <button onClick={() => handleOptionSelection('קצבה-כללית')} id="option-a">בדיקה לגבי סכום קצבה כללית</button>
                 <button onClick={() => handleOptionSelection('שיקום')} id="option-b"> זכאות לשיקום לימודים</button>
@@ -364,9 +437,23 @@ const ChatScreen = () => {
               </button>
               {step > 0 && (
               <button className="go-back" onClick={goBack}>חזור</button>
-            )}
+            )}    
             </div>
           </div>
+          
+          {isPopupOpen && (
+              <>
+              <div className="overlay" onClick={closePopup}></div>
+                <div className="popup">
+                  <p>
+                    פרויקט זה פותח על ידי פבל קורמילצ'יק ואוראל מאיר. <br/>
+                    בהנחיית עורך דין איתן עמרם בקרוס נגישות יישמוית למהנדסי תוכנה.<br/>
+                    צא'ט זה אינו מהווה תחלופה או כל ייעוץ מקצועי ופותח על מנת להכיוון בלבד!
+                    </p>
+                  <button className="close-popup" onClick={closePopup}>סגירה</button>
+                </div>
+              </>
+            )}
         </div>
       </div>
     </div>
